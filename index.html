@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PHANTOM ACCESS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    overflow: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .top-right-banner {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 1.2rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    z-index: 10000;
+    color: #fff;
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 0s ease-in-out 5s forwards;
+  }
+
+  .glitch-text {
+    position: relative;
+    color: #fff;
+    font-size: 2.0rem;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.19rem;
+    line-height: 1.6;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .main-content {
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out 0.5s forwards;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 1.875rem 1.875rem;
+    z-index: -1;
+  }
+
+  .container {
+    text-align: center;
+    max-width: 50rem;
+    padding: 2.5rem;
+  }
+
+  .avatar-container {
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .avatar {
+    width: 31.25rem;
+    max-width: 90vw;
+    height: 20.25rem;
+    max-height: 54vw;
+    border-radius: 0%;
+    border: 0.188rem solid rgba(255,255,255,0.3);
+    box-shadow:
+      0 0 1.875rem rgba(255,255,255,0.2),
+      inset 0 0 1.875rem rgba(255,255,255,0.1);
+    background: linear-gradient(135deg, #333, #111);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pwned-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 3.75rem;
+    font-weight: 900;
+    letter-spacing: 0.1rem;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(45deg, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      filter: drop-shadow(0 0 1.25rem rgba(255,255,255,0.3));
+    }
+    to {
+      filter: drop-shadow(0 0 2.5rem rgba(255,255,255,0.6));
+    }
+  }
+
+  .terminal-section {
+    background: rgba(0,0,0,0.8);
+    border: 0.063rem solid rgba(255,255,255,0.2);
+    border-radius: 0.625rem;
+    padding: 1.875rem;
+    margin-top: 2.5rem;
+    backdrop-filter: blur(0.625rem);
+    box-shadow: 0 0.625rem 1.875rem rgba(0,0,0,0.5);
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.938rem;
+    border-bottom: 0.063rem solid rgba(255,255,255,0.1);
+  }
+
+  .terminal-title a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.375rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .command-line {
+    font-size: 1.5rem; 
+    margin: 0.938rem 0;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    color: white;
+    font-weight: 600;
+  }
+
+  .footer-message {
+    margin-top: 2.5rem;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.125rem;
+    text-transform: uppercase;
+  }
+
+  .footer-message.spaced {
+    letter-spacing: 0.3rem;
+  }
+
+  .left-bottom-link {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: background 0.3s ease;
+    z-index: 2000;
+  }
+
+  .left-bottom-link:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* إضافة مربع جديد في أسفل اليمين */
+  .right-bottom-link {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25rem; /* حجم أكبر قليلاً */
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    padding: 0.4rem 1rem;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: background 0.3s ease;
+    z-index: 2000;
+  }
+
+  .right-bottom-link:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .pwned-title {
+      font-size: 2rem;
+      letter-spacing: 0.25rem;
+    }
+    .avatar {
+      width: 20vw;
+      height: 20vw;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-right-banner">
+  اترك عنك فايف ام ياجديد<br>وانطرب مع الاسطورة
+</div>
+
+<audio id="bg-music" autoplay loop muted>
+  <source src="https://cdn.discordapp.com/attachments/1393604299283501107/1393968720082112773/WW.mp3?ex=687d0309&is=687bb189&hm=f1fd0c6e1a1bee17fac678be6c82cc7306c6b4e823695eaa90ee2ec57cd64066&" type="audio/mpeg">
+</audio>
+
+<div class="loading-screen">
+  <div class="loading-text glitch-text">
+    Preparing to be RapeD ..<br>discord.gg/TdA8sh خش عشان ماتتلكم 
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="container">
+    <div class="avatar-container">
+      <div class="avatar">
+        <img src="https://media1.tenor.com/m/u0j76TG-CiEAAAAd/%D8%A3%D8%B3%D8%B7%D9%88%D8%B1%D8%A9-%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6.gif" alt="animated gif" />
+      </div>
+    </div>
+
+    <h1 class="pwned-title">fucked by S6aM</h1>
+
+    <div class="terminal-section">
+      <div class="terminal-header">
+        <div class="terminal-title">
+          <a href="https://discord.gg/TdA8sh" target="_blank">discord.gg/TdA8sh</a>
+        </div>
+      </div>
+
+      <div class="command-line">
+        S6am : "قوة الإرادة وحدها لا تكفي في المعركة."
+      </div>
+    </div>
+
+    <div class="footer-message spaced">THe Nightmare is CoMing</div>
+
+    <a href="https://discord.gg/TdA8sh" target="_blank" class="left-bottom-link">tda8sh ?</a>
+    <a href="https://discord.gg/TdA8sh" target="_blank" class="right-bottom-link">تداقـــــش ؟</a>
+
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', function () {
+    setTimeout(() => {
+      document.querySelector('.loading-screen').style.display = 'none';
+    }, 2000);
+  });
+
+  setInterval(() => {
+    if (Math.random() < 0.50) {
+      document.body.style.filter = 'brightness(1.2)';
+      setTimeout(() => {
+        document.body.style.filter = 'brightness(1)';
+      }, 50);
+    }
+  }, 2000);
+</script>
+
+</body>
+</html>
